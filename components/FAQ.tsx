@@ -19,26 +19,24 @@ export function FAQ({ items }: FAQProps) {
   };
 
   return (
-    <div className="space-y-4">
+    <div className="faq-list">
       {items.map((item, index) => (
-        <div 
-          key={index} 
-          className="border border-gray-200 rounded-lg overflow-hidden bg-white shadow-sm"
-        >
+        <div key={index} className="faq-item">
           <button
+            type="button"
             onClick={() => toggleItem(index)}
-            className="w-full px-6 py-4 text-left flex justify-between items-center hover:bg-gray-50 transition-colors"
+            className="faq-question-btn"
           >
-            <span className="font-semibold text-gray-900 pr-4">
+            <span className="faq-question-text">
               {item.question}
             </span>
-            <span className="text-2xl text-[#0047AB] flex-shrink-0 font-bold">
+            <span className="faq-toggle">
               {openIndex === index ? "−" : "+"}
             </span>
           </button>
           {openIndex === index && (
-            <div className="px-6 py-4 bg-blue-50 border-t border-gray-200">
-              <p className="text-gray-700 leading-relaxed">
+            <div className="faq-answer">
+              <p className="faq-answer-text">
                 {item.answer}
               </p>
             </div>
