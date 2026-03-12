@@ -1,0 +1,95 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+  --tesda-blue: #0047AB;
+  --tesda-blue-dark: #003380;
+  --tesda-blue-light: #1E5FBF;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  color: var(--foreground);
+  background: var(--background);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    font-weight: 700;
+    line-height: 1.2;
+  }
+
+  h1{
+    font-size: 50px;
+  }
+  
+  p {
+    line-height: 1.6;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  
+  .bg-tesda-pattern {
+    background: linear-gradient(135deg, #0047AB 0%, #003380 100%);
+    position: relative;
+  }
+  
+  .bg-tesda-pattern::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+      linear-gradient(30deg, rgba(255, 255, 255, 0.05) 12%, transparent 12.5%, transparent 87%, rgba(255, 255, 255, 0.05) 87.5%, rgba(255, 255, 255, 0.05)),
+      linear-gradient(150deg, rgba(255, 255, 255, 0.05) 12%, transparent 12.5%, transparent 87%, rgba(255, 255, 255, 0.05) 87.5%, rgba(255, 255, 255, 0.05)),
+      linear-gradient(30deg, rgba(255, 255, 255, 0.05) 12%, transparent 12.5%, transparent 87%, rgba(255, 255, 255, 0.05) 87.5%, rgba(255, 255, 255, 0.05)),
+      linear-gradient(150deg, rgba(255, 255, 255, 0.05) 12%, transparent 12.5%, transparent 87%, rgba(255, 255, 255, 0.05) 87.5%, rgba(255, 255, 255, 0.05));
+    background-size: 80px 140px;
+    background-position: 0 0, 0 0, 40px 70px, 40px 70px;
+    opacity: 0.3;
+    pointer-events: none;
+  }
+}
+
+@layer components {
+  .tesda-header-brand {
+    display: flex;
+    flex-direction: column;
+    color: #ffffff;
+    line-height: 1.4;
+  }
+
+  .tesda-header-title {
+    font-weight: 700;
+    font-size: 2rem;
+    margin: 0;
+  }
+
+  .tesda-header-subtitle {
+    font-size: 1rem;
+    margin: 0.2rem 0 0;
+  }
+
+  .tesda-header-link {
+    font-weight: 500;
+    color: #ffffff;
+    font-size: 1.05rem;
+    transition: color 0.2s ease;
+  }
+}
