@@ -30,13 +30,13 @@ export default function Home() {
             </div>
           </div>
           <h1 className="hero-title">
-            Welcome, TESDA Scholar Enrollees
+            Welcome, <br /> TESDA Scholar Enrollees
           </h1>
           <p className="hero-subtitle">
             Please complete your registration to confirm your slot and proceed with onboarding requirements.
           </p>
           <div className="hero-actions">
-            <ButtonLink href={SITE_CONFIG.REGISTRATION_URL} variant="primary" className="btn--hero-primary">
+            <ButtonLink href= "/form" variant="primary" className="btn--hero-primary">
               Proceed to Registration
             </ButtonLink>
             <ButtonLink href="#requirements" variant="secondary" className="btn--hero-secondary">
