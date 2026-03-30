@@ -45,9 +45,34 @@ function resolveTemplatePath(): string | null {
   return null;
 }
 
+function formatDateNowMMDDYYYY(d: Date): string {
+  const mm = String(d.getMonth() + 1).padStart(2, "0");
+  const dd = String(d.getDate()).padStart(2, "0");
+  const yyyy = String(d.getFullYear());
+  return `${mm}/${dd}/${yyyy}`;
+}
+
+function safeFilenamePart(input: unknown, fallback: string): string {
+  if (typeof input !== "string") return fallback;
+  const cleaned = input
+    .trim()
+    .replace(/[\\/:*?"<>|]/g, "")
+    .replace(/\s+/g, " ");
+  return cleaned.length > 0 ? cleaned : fallback;
+}
+
 export async function POST(req: NextRequest) {
   try {
-    const data = await req.json();
+    const data = (await req.json()) as Record<string, unknown>;
+
+    // Ensure {date_now} always has a value in the generated docx.
+    // (Docxtemplater nullGetter turns missing keys into "", which appears as blank output.)
+    if (
+      typeof data.date_now !== "string" ||
+      data.date_now.trim().length === 0
+    ) {
+      data.date_now = formatDateNowMMDDYYYY(new Date());
+    }
 
     const templatePath = resolveTemplatePath();
     if (!templatePath) {
@@ -79,13 +104,17 @@ export async function POST(req: NextRequest) {
       compression: "DEFLATE",
     });
 
+    const last = safeFilenamePart(data.last_name, "LastName");
+    const first = safeFilenamePart(data.first_name, "FirstName");
+    const downloadName = `${last}, ${first} - Learners_Profile.docx`;
+
     return new NextResponse(new Uint8Array(buf), {
       status: 200,
       headers: {
         "Content-Type":
           "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
         "Content-Disposition":
-          'attachment; filename="Learners-Profile-Filled.docx"',
+          `attachment; filename="${downloadName}"`,
       },
     });
   } catch (error) {
