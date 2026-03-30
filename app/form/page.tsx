@@ -195,6 +195,33 @@ type FormData = {
   /** Step 3 — parent/guardian info */
   name_parent: string;
   address_parent: string;
+  // Step 4 — beneficiary classification (independent checkboxes)
+  "4ps": boolean;
+  displaced_worker: boolean;
+  afp_pnp: boolean;
+  industry_worker: boolean;
+  outofschoolyouth: boolean;
+  rebel: boolean;
+  tesda_alumni: boolean;
+  victim: boolean;
+  reform: boolean;
+  drug: boolean;
+  farmer: boolean;
+  inmate: boolean;
+  ofw_dependent: boolean;
+  ofw_returning: boolean;
+  tvet: boolean;
+  wounded: boolean;
+  balik_probinsya: boolean;
+  afp_pnp_killed: boolean;
+  indigenous: boolean;
+  milf: boolean;
+  rcef: boolean;
+  student: boolean;
+  personnel: boolean;
+  others: boolean;
+  /** Free-text "Please specify" for Others — shown only when `others` is true */
+  classification: string;
 };
 
 const initialFormData: FormData = {
@@ -224,6 +251,31 @@ const initialFormData: FormData = {
   educational_attainment: "",
   name_parent: "",
   address_parent: "",
+  "4ps": false,
+  displaced_worker: false,
+  afp_pnp: false,
+  industry_worker: false,
+  outofschoolyouth: false,
+  rebel: false,
+  tesda_alumni: false,
+  victim: false,
+  reform: false,
+  drug: false,
+  farmer: false,
+  inmate: false,
+  ofw_dependent: false,
+  ofw_returning: false,
+  tvet: false,
+  wounded: false,
+  balik_probinsya: false,
+  afp_pnp_killed: false,
+  indigenous: false,
+  milf: false,
+  rcef: false,
+  student: false,
+  personnel: false,
+  others: false,
+  classification: "",
 };
 
 type StepperProps = {
@@ -939,6 +991,85 @@ function StepContent({ step, formData, onChange, addressLists }: StepContentProp
     );
   }
 
+  if (step === 4) {
+    const beneficiaryOptions: { name: keyof FormData; label: string }[] = [
+      { name: "4ps",            label: "4Ps Beneficiary" },
+      { name: "displaced_worker", label: "Displaced Workers" },
+      { name: "afp_pnp",        label: "Family Members of AFP and PNP Wounded-in-Action" },
+      { name: "industry_worker", label: "Industry Workers" },
+      { name: "outofschoolyouth", label: "Out-of-School Youth" },
+      { name: "rebel",          label: "Rebel Returnees / Decommissioned Combatants" },
+      { name: "tesda_alumni",   label: "TESDA Alumni" },
+      { name: "victim",         label: "Victim of Natural Disasters and Calamities" },
+      { name: "reform",         label: "Agrarian Reform Beneficiary" },
+      { name: "drug",           label: "Drug Dependents Surrenderees / Surrenderers" },
+      { name: "farmer",         label: "Farmers / Fishermen" },
+      { name: "inmate",         label: "Inmates and Detainees" },
+      { name: "ofw_dependent",  label: "Overseas Filipino Workers Dependent" },
+      { name: "ofw_returning",  label: "Returning / Repatriated Overseas Filipino Workers" },
+      { name: "tvet",           label: "TVET Trainers" },
+      { name: "wounded",        label: "Wounded-in-Action AFP & PNP Personnel" },
+      { name: "balik_probinsya", label: "Balik Probinsya" },
+      { name: "afp_pnp_killed", label: "Family Members of AFP and PNP Killed-in-Action" },
+      { name: "indigenous",     label: "Indigenous People & Cultural Communities" },
+      { name: "milf",           label: "MILF Beneficiary" },
+      { name: "rcef",           label: "RCEF-RESP" },
+      { name: "student",        label: "Student" },
+      { name: "personnel",      label: "Uniformed Personnel" },
+      { name: "others",         label: "Others" },
+    ];
+
+    return (
+      <div className="step-form">
+        <div className="form-group">
+          <h2 className="form-group-title">Beneficiary Classification</h2>
+          <div className="form-field">
+            <span className="form-label">Select all that apply</span>
+            <div
+              className="form-checkbox-group"
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(2, 1fr)",
+                gap: "0.5rem 1.5rem",
+                padding: "0.25rem 0",
+              }}
+            >
+              {beneficiaryOptions.map(({ name, label }) => (
+                <label key={name} className="form-checkbox-item">
+                  <input
+                    type="checkbox"
+                    className="form-checkbox"
+                    name={name}
+                    checked={formData[name] as boolean}
+                    onChange={onChange}
+                  />
+                  <span className="form-checkbox-label">{label}</span>
+                </label>
+              ))}
+            </div>
+          </div>
+
+          {formData.others && (
+            <div className="form-field">
+              <label className="form-label" htmlFor="classification">
+                Please Specify
+              </label>
+              <input
+                className="form-input"
+                type="text"
+                id="classification"
+                name="classification"
+                placeholder="{classification}"
+                value={formData.classification}
+                onChange={onChange}
+              />
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  }
+
   return (
     <p className="form-step-placeholder">
       This is where your form fields for step {step} will go. You can replace
@@ -1143,6 +1274,10 @@ export default function FormPage() {
           employment_type: value as FormData["employment_type"],
         };
       }
+      // Clear "Please Specify" when the Others checkbox is unchecked.
+      if (name === "others" && type === "checkbox" && !checked) {
+        return { ...prev, others: false, classification: "" };
+      }
       return {
         ...prev,
         [name]: type === "checkbox" ? checked : value,
@@ -1235,6 +1370,32 @@ export default function FormPage() {
         empt6: chk(formData.employment_type === "empt6"),
         empt7: chk(formData.employment_type === "empt7"),
         empt8: chk(formData.employment_type === "empt8"),
+        // Step 4 — beneficiary classification checkboxes
+        "4ps":             chk(formData["4ps"]),
+        displaced_worker:  chk(formData.displaced_worker),
+        afp_pnp:           chk(formData.afp_pnp),
+        industry_worker:   chk(formData.industry_worker),
+        outofschoolyouth:  chk(formData.outofschoolyouth),
+        rebel:             chk(formData.rebel),
+        tesda_alumni:      chk(formData.tesda_alumni),
+        victim:            chk(formData.victim),
+        reform:            chk(formData.reform),
+        drug:              chk(formData.drug),
+        farmer:            chk(formData.farmer),
+        inmate:            chk(formData.inmate),
+        ofw_dependent:     chk(formData.ofw_dependent),
+        ofw_returning:     chk(formData.ofw_returning),
+        tvet:              chk(formData.tvet),
+        wounded:           chk(formData.wounded),
+        balik_probinsya:   chk(formData.balik_probinsya),
+        afp_pnp_killed:    chk(formData.afp_pnp_killed),
+        indigenous:        chk(formData.indigenous),
+        milf:              chk(formData.milf),
+        rcef:              chk(formData.rcef),
+        student:           chk(formData.student),
+        personnel:         chk(formData.personnel),
+        others:            chk(formData.others),
+        classification:    formData.others ? formData.classification : "",
       };
       const res = await fetch("/api/generate-document", {
         method: "POST",
