@@ -141,6 +141,74 @@ const EDUCATIONAL_ATTAINMENT_OPTIONS = [
   { value: "educ13", label: "Doctorate" },
 ] as const;
 
+const COURSE_OPTIONS = [
+  {
+    sector: "Tourism (Hotel and Restaurant)",
+    qualifications: [
+      "Bread and Pastry Production NC II",
+      "Cookery NC II",
+      "Food and Beverage Services NC II",
+    ],
+  },
+  {
+    sector: "Electrical and Electronics",
+    qualifications: [
+      "Computer Systems Servicing NC II",
+      "Electronic Products Assembly and Servicing NC II",
+      "Electrical Installation and Maintenance NC II",
+      "Electrical Installation and Maintenance NC III",
+    ],
+  },
+  {
+    sector: "Automotive and Land Transportation",
+    qualifications: [
+      "Driving NC II",
+      "Automotive Servicing NC I",
+      "Motorcycle/Small Engine Servicing NC II",
+    ],
+  },
+  {
+    sector: "Construction",
+    qualifications: [
+      "Masonry NC I",
+      "Carpentry NC II",
+      "Plumbing NC I",
+      "Plumbing NC II",
+    ],
+  },
+  {
+    sector: "Metals and Engineering",
+    qualifications: [
+      "Shielded Metal Arc Welding (SMAW) NC I",
+      "Shielded Metal Arc Welding (SMAW) NC II",
+      "Shielded Metal Arc Welding (SMAW) NC III",
+    ],
+  },
+  {
+    sector: "Agriculture, Forestry and Fishery",
+    qualifications: [
+      "Agricultural Crops Production NC II",
+      "Organic Agriculture Production NC II",
+    ],
+  },
+  {
+    sector: "Garments",
+    qualifications: ["Dressmaking NC II"],
+  },
+  {
+    sector: "HVAC and Refrigeration",
+    qualifications: ["RAC Servicing (DOMRAC) NC II"],
+  },
+  {
+    sector: "TVET",
+    qualifications: ["Trainers Methodology Level NC I"],
+  },
+  {
+    sector: "Social, Community Development and Other Services",
+    qualifications: ["Bookkeeping NC III"],
+  },
+] as const;
+
 /** PSGC proxy returns a JSON array on success; on error it may return `{ error: string }`. */
 function sortPsgcList<T extends PsgcItem>(data: unknown): T[] {
   if (!Array.isArray(data)) {
@@ -222,6 +290,30 @@ type FormData = {
   others: boolean;
   /** Free-text "Please specify" for Others — shown only when `others` is true */
   classification: string;
+  // Step 5 — Type of Disability (independent checkboxes; for Persons with Disability Only)
+  dis1: boolean;
+  dis2: boolean;
+  dis3: boolean;
+  dis4: boolean;
+  dis5: boolean;
+  dis6: boolean;
+  dis7: boolean;
+  dis8: boolean;
+  dis9: boolean;
+  // Step 6 — Causes of Disability (independent checkboxes; for Persons with Disability Only)
+  cause1: boolean;
+  cause2: boolean;
+  cause3: boolean;
+  // Step 7 — Name of Course/Qualification (single-select dropdown; sent to docx as {course})
+  course: string;
+  /** Free-text specify when `course === "other"`; replaces {course} in docx output */
+  course_other: string;
+  // Step 8 — Scholarship Package (single-select dropdown; sent to docx as {type_isko})
+  type_isko: string;
+  /** Free-text specify when `type_isko === "other"`; replaces {type_isko} in docx output */
+  type_isko_other: string;
+  // Step 9 — Privacy Consent and Disclaimer (single-select; exported as {consent_agree}/{consent_disagree})
+  consent: "" | "agree" | "disagree";
 };
 
 const initialFormData: FormData = {
@@ -276,6 +368,23 @@ const initialFormData: FormData = {
   personnel: false,
   others: false,
   classification: "",
+  dis1: false,
+  dis2: false,
+  dis3: false,
+  dis4: false,
+  dis5: false,
+  dis6: false,
+  dis7: false,
+  dis8: false,
+  dis9: false,
+  cause1: false,
+  cause2: false,
+  cause3: false,
+  course: "",
+  course_other: "",
+  type_isko: "",
+  type_isko_other: "",
+  consent: "",
 };
 
 type StepperProps = {
@@ -1070,6 +1179,289 @@ function StepContent({ step, formData, onChange, addressLists }: StepContentProp
     );
   }
 
+  if (step === 5) {
+    const disabilityOptions: { name: keyof FormData; label: string }[] = [
+      { name: "dis1", label: "Mental/Intellectual" },
+      { name: "dis2", label: "Hearing Disability" },
+      { name: "dis3", label: "Psychosocial Disability" },
+      { name: "dis4", label: "Visual Disability" },
+      { name: "dis5", label: "Speech Impairment" },
+      { name: "dis6", label: "Disability Due to Chronic Illness" },
+      { name: "dis7", label: "Orthopedic (Musculoskeletal) Disability" },
+      { name: "dis8", label: "Multiple Disabilities, specify" },
+      { name: "dis9", label: "Learning Disability" },
+    ];
+
+    return (
+      <div className="step-form">
+        <div className="form-group">
+          <h2 className="form-group-title">Type of Disability</h2>
+          <div className="form-field">
+            <span className="form-label">
+              For Persons with Disability Only — select all that apply.
+            </span>
+            <div
+              className="form-checkbox-group"
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(2, 1fr)",
+                gap: "0.5rem 1.5rem",
+                padding: "0.25rem 0",
+              }}
+            >
+              {disabilityOptions.map(({ name, label }) => (
+                <label key={name} className="form-checkbox-item">
+                  <input
+                    type="checkbox"
+                    className="form-checkbox"
+                    name={name}
+                    checked={formData[name] as boolean}
+                    onChange={onChange}
+                  />
+                  <span className="form-checkbox-label">{label}</span>
+                </label>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (step === 6) {
+    const causeOptions: { name: keyof FormData; label: string }[] = [
+      { name: "cause1", label: "Congenital/Inborn" },
+      { name: "cause2", label: "Illness" },
+      { name: "cause3", label: "Injury" },
+    ];
+
+    return (
+      <div className="step-form">
+        <div className="form-group">
+          <h2 className="form-group-title">Causes of Disability</h2>
+          <div className="form-field">
+            <span className="form-label">
+              For Persons with Disability Only — select all that apply.
+            </span>
+            <div
+              className="form-checkbox-group"
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(2, 1fr)",
+                gap: "0.5rem 1.5rem",
+                padding: "0.25rem 0",
+              }}
+            >
+              {causeOptions.map(({ name, label }) => (
+                <label key={name} className="form-checkbox-item">
+                  <input
+                    type="checkbox"
+                    className="form-checkbox"
+                    name={name}
+                    checked={formData[name] as boolean}
+                    onChange={onChange}
+                  />
+                  <span className="form-checkbox-label">{label}</span>
+                </label>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (step === 7) {
+    const isOtherCourse = formData.course === "other";
+    return (
+      <div className="step-form">
+        <div className="form-group">
+          <h2 className="form-group-title">Name of Course/Qualification</h2>
+          <div className="form-field">
+            <label className="form-label" htmlFor="course">
+              Course / Qualification
+            </label>
+            <select
+              className="form-select"
+              id="course"
+              name="course"
+              value={formData.course}
+              onChange={onChange}
+            >
+              <option value="" disabled>
+                Select course/qualification
+              </option>
+              {COURSE_OPTIONS.map((group) => (
+                <optgroup key={group.sector} label={group.sector}>
+                  {group.qualifications.map((q) => (
+                    <option key={q} value={q}>
+                      {q}
+                    </option>
+                  ))}
+                </optgroup>
+              ))}
+              <option value="other">Other (please specify)</option>
+            </select>
+          </div>
+
+          {isOtherCourse && (
+            <div className="form-field">
+              <label className="form-label" htmlFor="course_other">
+                Please Specify
+              </label>
+              <input
+                className="form-input"
+                type="text"
+                id="course_other"
+                name="course_other"
+                placeholder="{course}"
+                value={formData.course_other}
+                onChange={onChange}
+              />
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  }
+
+  if (step === 8) {
+    const isOtherIsko = formData.type_isko === "other";
+    return (
+      <div className="step-form">
+        <div className="form-group">
+          <h2 className="form-group-title">Scholarship Package</h2>
+          <div className="form-field">
+            <label className="form-label" htmlFor="type_isko">
+              If Scholar — select the scholarship package
+            </label>
+            <select
+              className="form-select"
+              id="type_isko"
+              name="type_isko"
+              value={formData.type_isko}
+              onChange={onChange}
+            >
+              <option value="" disabled>
+                Select scholarship package
+              </option>
+              <option value="TWSP">TWSP</option>
+              <option value="PESFA">PESFA</option>
+              <option value="STEP">STEP</option>
+              <option value="other">Other (please specify)</option>
+            </select>
+          </div>
+
+          {isOtherIsko && (
+            <div className="form-field">
+              <label className="form-label" htmlFor="type_isko_other">
+                Please Specify
+              </label>
+              <input
+                className="form-input"
+                type="text"
+                id="type_isko_other"
+                name="type_isko_other"
+                placeholder="{type_isko}"
+                value={formData.type_isko_other}
+                onChange={onChange}
+              />
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  }
+
+  if (step === 9) {
+    const consentOptions = [
+      { value: "agree", label: "I Agree" },
+      { value: "disagree", label: "I Disagree" },
+    ] as const;
+
+    return (
+      <div className="step-form">
+        <div className="form-group">
+          <h2 className="form-group-title">Privacy Consent and Disclaimer</h2>
+
+          <div className="form-field">
+            <p className="form-step-placeholder">
+              <em>
+                I hereby attest that I have read and understood the Privacy
+                Notice of TESDA through its website (
+                <a
+                  href="https://www.tesda.gov.ph"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  https://www.tesda.gov.ph
+                </a>
+                ) and thereby giving my consent in the processing of my personal
+                information indicated in this Learners Profile. The processing
+                includes scholarships, employment, survey, and all other related
+                TESDA programs that may be beneficial to my qualifications.
+              </em>
+            </p>
+          </div>
+
+          <div className="form-field">
+            <span className="form-label">Consent</span>
+            <div className="form-checkbox-group">
+              {consentOptions.map(({ value, label }) => (
+                <label key={value} className="form-checkbox-item">
+                  <input
+                    type="radio"
+                    className="form-checkbox"
+                    name="consent"
+                    value={value}
+                    checked={formData.consent === value}
+                    onChange={onChange}
+                  />
+                  <span className="form-checkbox-label">{label}</span>
+                </label>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (step === 10) {
+    return (
+      <div className="step-form">
+        <div className="form-group">
+          <h2 className="form-group-title">Print and Sign</h2>
+
+          <div className="form-field">
+            <p className="form-step-placeholder">
+              You&apos;re ready to generate your Learners Profile.
+            </p>
+          </div>
+
+          <div className="form-field">
+            <ol className="form-step-placeholder" style={{ paddingLeft: "1.25rem", lineHeight: 1.6 }}>
+              <li>
+                Click <strong>Generate Document</strong> below to download your
+                Learners Profile (.docx).
+              </li>
+              <li>Print the document on A4 size bond paper.</li>
+              <li>
+                <strong>Sign your name over the printed name</strong> in the
+                &ldquo;Applicant&apos;s Signature&rdquo; section, and place
+                your right thumbmark in the box provided.
+              </li>
+              <li>
+                Submit the signed printout, together with the requirements
+                listed on the home page, during your registration session.
+              </li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <p className="form-step-placeholder">
       This is where your form fields for step {step} will go. You can replace
@@ -1248,8 +1640,19 @@ export default function FormPage() {
 
   const progressPct = Math.round(((currentStep - 1) / (totalSteps - 1)) * 100);
 
-  const goNext = () => setCurrentStep((prev) => Math.min(prev + 1, totalSteps));
-  const goPrev = () => setCurrentStep((prev) => Math.max(prev - 1, 1));
+  const scrollToTop = () => {
+    if (typeof window !== "undefined") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  };
+  const goNext = () => {
+    setCurrentStep((prev) => Math.min(prev + 1, totalSteps));
+    scrollToTop();
+  };
+  const goPrev = () => {
+    setCurrentStep((prev) => Math.max(prev - 1, 1));
+    scrollToTop();
+  };
 
   function handleChange(
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -1277,6 +1680,14 @@ export default function FormPage() {
       // Clear "Please Specify" when the Others checkbox is unchecked.
       if (name === "others" && type === "checkbox" && !checked) {
         return { ...prev, others: false, classification: "" };
+      }
+      // Clear free-text "Please Specify" when course changes away from "other".
+      if (name === "course" && value !== "other") {
+        return { ...prev, course: value, course_other: "" };
+      }
+      // Clear free-text "Please Specify" when scholarship package changes away from "other".
+      if (name === "type_isko" && value !== "other") {
+        return { ...prev, type_isko: value, type_isko_other: "" };
       }
       return {
         ...prev,
@@ -1319,6 +1730,10 @@ export default function FormPage() {
           formData.year_bday
         ),
         date_now: formatDateNowMMDDYYYY(new Date()),
+        // Word tag {m_initial_name} expects the middle initial (e.g. "J.") derived from {middle_name}
+        m_initial_name: formData.middle_name.trim()
+          ? `${formData.middle_name.trim().charAt(0).toUpperCase()}.`
+          : "",
         // Word tag {month_bday} expects "January".."December" not "01".."12"
         month_bday: monthBdayLabel,
         // Convert PSGC codes to readable names for document output.
@@ -1396,6 +1811,34 @@ export default function FormPage() {
         personnel:         chk(formData.personnel),
         others:            chk(formData.others),
         classification:    formData.others ? formData.classification : "",
+        // Step 5 — type of disability checkboxes
+        dis1:              chk(formData.dis1),
+        dis2:              chk(formData.dis2),
+        dis3:              chk(formData.dis3),
+        dis4:              chk(formData.dis4),
+        dis5:              chk(formData.dis5),
+        dis6:              chk(formData.dis6),
+        dis7:              chk(formData.dis7),
+        dis8:              chk(formData.dis8),
+        dis9:              chk(formData.dis9),
+        // Step 6 — causes of disability checkboxes
+        cause1:            chk(formData.cause1),
+        cause2:            chk(formData.cause2),
+        cause3:            chk(formData.cause3),
+        // Step 7 — name of course/qualification
+        // When the user picks "Other", emit the typed text instead of the sentinel "other".
+        course:
+          formData.course === "other"
+            ? formData.course_other
+            : formData.course,
+        // Step 8 — scholarship package
+        type_isko:
+          formData.type_isko === "other"
+            ? formData.type_isko_other
+            : formData.type_isko,
+        // Step 9 — privacy consent (single-select source -> two checkmark placeholders)
+        consent_agree:    chk(formData.consent === "agree"),
+        consent_disagree: chk(formData.consent === "disagree"),
       };
       const res = await fetch("/api/generate-document", {
         method: "POST",
