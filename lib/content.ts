@@ -1,7 +1,9 @@
 export const SITE_CONFIG = {
   REGISTRATION_URL: "#register",
-  supportEmail: "support@tesda.gov.ph",
-  hotline: "1-800-TESDA-00"
+  supportEmail: "ptclipa@tesda.gov.ph",
+  hotline: "(043) 272-9646",
+  phone: "0994 790 0252",
+  address: "TESDA PTC - Lipa, Olan's Place, Marawoy, Lipa City, Batangas"
 } as const;
 
 export const REGISTRATION_STEPS = [
@@ -12,34 +14,34 @@ export const REGISTRATION_STEPS = [
   },
   {
     id: 2,
-    title: "Complete Online Registration Form",
-    description: "Fill out the registration form accurately with your personal and educational information."
+    title: "Complete and print the Registration Form",
+    description: "Fill out the online registration form accurately with your personal and educational information. Print the form and bring it to the registration session."
   },
   {
     id: 3,
     title: "Submit Required Documents",
-    description: "Upload clear copies of all required documents through the registration portal."
+    description: "Submit the hard copies of all required documents to the registration session."
   },
   {
     id: 4,
     title: "Wait for Confirmation",
-    description: "You will receive a confirmation email within 3-5 business days after submission."
+    description: "You will receive any updates about the course you enrolled in your group chat."
   },
   {
     id: 5,
     title: "Attend Orientation",
-    description: "Attend the mandatory orientation session on the scheduled date provided in your confirmation."
+    description: "Attend the mandatory orientation session on the scheduled date provided in your group chat."
   }
 ] as const;
 
 export const REQUIREMENTS = [
-  "Valid Government-issued ID (PhilSys ID, Passport, Driver's License, or Voter's ID)",
   "Birth Certificate (PSA-issued)",
-  "Highest Educational Attainment (Diploma or Certificate of Completion)",
-  "2x2 ID Photo (recent, white background)",
-  "Proof of Residency (Barangay Certificate or Utility Bill)",
+  "Highest Educational Attainment (Diploma/Certificate of Completion, or Transcript of Records)",
+  "4 pieces of Passport-size ID Photo (recent, white background, with name)",
+  "4 pieces of 1x1 ID Photo (recent, white background, with name)",
+  "Barangay Certificate of Residency/NBI Clearance, or Police Clearance",
   "Medical Certificate (issued within the last 6 months)",
-  "Parent/Guardian Consent Form (for applicants below 18 years old)"
+  // "Preventive Covid-19 Certificate"
 ] as const;
 
 export const IMPORTANT_REMINDERS = [
@@ -56,9 +58,13 @@ export const IMPORTANT_REMINDERS = [
     description: "All documents must be clear, legible, and in the specified format. Incomplete submissions will be returned."
   },
   {
-    title: "Contact Support",
-    description: `For questions or assistance, contact us at ${SITE_CONFIG.supportEmail} or call our hotline at ${SITE_CONFIG.hotline}.`
-  }
+    title: "Printing Requirement",
+    description: "The printed registration form should be on A4 size bond paper."
+  },
+  // {
+  //   title: "Contact Support",
+  //   description: `For questions or assistance, contact us at ${SITE_CONFIG.supportEmail} or call our hotline at ${SITE_CONFIG.hotline}.`
+  // }
 ] as const;
 
 export const FAQS = [
@@ -68,11 +74,11 @@ export const FAQS = [
   },
   {
     question: "Can I edit my application after submission?",
-    answer: "Yes, you can request to edit your application by contacting our support team within 24 hours of submission. After this period, amendments may require additional processing time."
+    answer: "Yes, this registration portal is not recorded in our enrollment system. You can generate and print a new registration form anytime you want before submitting it to the registration session."
   },
   {
     question: "How long does the registration process take?",
-    answer: "The entire registration process typically takes 5-7 business days from submission to confirmation. You will receive updates via email at each stage."
+    answer: "The entire registration process typically takes 40 minutes to 1 hour to complete."
   },
   {
     question: "Is there a registration fee?",
@@ -80,6 +86,6 @@ export const FAQS = [
   },
   {
     question: "What happens if I miss the orientation?",
-    answer: "Orientation attendance is mandatory. If you cannot attend due to valid reasons, contact us immediately to arrange an alternative session. Unexcused absences may result in forfeiture of your slot."
+    answer: "Attendance at orientation is required. Because it is part of your training hours, missing it (even for valid reasons) results in an absence. Please be aware that too many absences will result in being dropped from the course."
   }
 ] as const;

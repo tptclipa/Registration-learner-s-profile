@@ -1,11 +1,12 @@
 import Image from "next/image";
+import Link from "next/link";
 
 export function Header() {
   return (
     <header className="header">
       <div className="header-inner">
         <div className="header-row">
-          <div className="header-brand">
+          <Link href="./" className="header-brand" aria-label="Go to home">
             <div className="header-logo-wrap">
               <Image
                 src="/logowhite.png"
@@ -20,7 +21,7 @@ export function Header() {
               <h1 className="tesda-header-title">TESDA</h1>
               <p className="tesda-header-subtitle">Scholar Registration Portal</p>
             </div>
-          </div>
+          </Link>
           <nav className="header-nav">
             <a href="#steps" className="tesda-header-link">
               Steps

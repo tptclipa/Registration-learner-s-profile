@@ -30,13 +30,25 @@ export default function Home() {
             </div>
           </div>
           <h1 className="hero-title">
-            Welcome, TESDA Scholar Enrollees
+            Welcome, <br /> TESDA Scholar Enrollees
           </h1>
           <p className="hero-subtitle">
-            Please complete your registration to confirm your slot and proceed with onboarding requirements.
+            Please complete your registration form, print it and bring it to the registration session.
+            <span className="hero-note">
+              <span className="hero-note-icon" aria-hidden="true">
+                <svg viewBox="0 0 20 20" fill="currentColor">
+                  <path
+                    fillRule="evenodd"
+                    d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM10 8a1 1 0 100-2 1 1 0 000 2zm-1 2a1 1 0 012 0v4a1 1 0 11-2 0v-4z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              </span>
+              Note: This portal is for form preparation only. Final registration will be conducted face-to-face at the center.
+            </span>
           </p>
           <div className="hero-actions">
-            <ButtonLink href={SITE_CONFIG.REGISTRATION_URL} variant="primary" className="btn--hero-primary">
+            <ButtonLink href= "/form" variant="primary" className="btn--hero-primary">
               Proceed to Registration
             </ButtonLink>
             <ButtonLink href="#requirements" variant="secondary" className="btn--hero-secondary">
@@ -162,6 +174,16 @@ export default function Home() {
                 <a href={`tel:${SITE_CONFIG.hotline}`} className="footer-link">
                   {SITE_CONFIG.hotline}
                 </a>
+              </p>
+              <p className="footer-link-line">
+                <span className="footer-link-label">Phone:</span>{" "}
+                <a href={`tel:${SITE_CONFIG.phone}`} className="footer-link">
+                  {SITE_CONFIG.phone}
+                </a>
+              </p>
+              <p className="footer-link-line">
+                <span className="footer-link-label">Address:</span>{" "}
+                <span>{SITE_CONFIG.address}</span>
               </p>
             </div>
           </div>
