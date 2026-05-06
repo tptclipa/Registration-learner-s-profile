@@ -1134,15 +1134,7 @@ function StepContent({ step, formData, onChange, addressLists }: StepContentProp
           <h2 className="form-group-title">Beneficiary Classification</h2>
           <div className="form-field">
             <span className="form-label">Select all that apply</span>
-            <div
-              className="form-checkbox-group"
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(2, 1fr)",
-                gap: "0.5rem 1.5rem",
-                padding: "0.25rem 0",
-              }}
-            >
+            <div className="form-checkbox-grid">
               {beneficiaryOptions.map(({ name, label }) => (
                 <label key={name} className="form-checkbox-item">
                   <input
@@ -1200,15 +1192,7 @@ function StepContent({ step, formData, onChange, addressLists }: StepContentProp
             <span className="form-label">
               For Persons with Disability Only — select all that apply.
             </span>
-            <div
-              className="form-checkbox-group"
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(2, 1fr)",
-                gap: "0.5rem 1.5rem",
-                padding: "0.25rem 0",
-              }}
-            >
+            <div className="form-checkbox-grid">
               {disabilityOptions.map(({ name, label }) => (
                 <label key={name} className="form-checkbox-item">
                   <input
@@ -1243,15 +1227,7 @@ function StepContent({ step, formData, onChange, addressLists }: StepContentProp
             <span className="form-label">
               For Persons with Disability Only — select all that apply.
             </span>
-            <div
-              className="form-checkbox-group"
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(2, 1fr)",
-                gap: "0.5rem 1.5rem",
-                padding: "0.25rem 0",
-              }}
-            >
+            <div className="form-checkbox-grid">
               {causeOptions.map(({ name, label }) => (
                 <label key={name} className="form-checkbox-item">
                   <input

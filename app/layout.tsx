@@ -1,6 +1,7 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { Header } from "@/components/Header";
+import { DeveloperEasterEgg } from "@/components/DeveloperEasterEgg";
 
 export const metadata: Metadata = {
   title: "TESDA Scholar Registration",
@@ -13,6 +14,13 @@ export const metadata: Metadata = {
   }
 };
 
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+  themeColor: "#0047AB",
+};
+
 export default function RootLayout({
   children
 }: Readonly<{
@@ -23,6 +31,7 @@ export default function RootLayout({
       <body className="antialiased bg-white">
         <Header />
         {children}
+        <DeveloperEasterEgg />
       </body>
     </html>
   );

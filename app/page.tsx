@@ -1,4 +1,5 @@
 import { ButtonLink } from "@/components/ButtonLink";
+import { FormApplicationIcon } from "@/components/FormApplicationIcon";
 import { Section } from "@/components/Section";
 import { FAQ } from "@/components/FAQ";
 import {
@@ -17,16 +18,7 @@ export default function Home() {
         <div className="hero-inner">
           <div className="hero-icon-wrap">
             <div className="hero-icon-circle">
-              <svg viewBox="0 0 100 100" className="hero-icon-svg" fill="currentColor">
-                <circle cx="50" cy="30" r="8" />
-                <path d="M50 40 L35 55 L35 70 L50 80 L65 70 L65 55 Z" />
-                <circle cx="35" cy="25" r="3" />
-                <circle cx="65" cy="25" r="3" />
-                <path d="M25 45 L25 65 L35 70" fill="none" stroke="currentColor" strokeWidth="2" />
-                <path d="M75 45 L75 65 L65 70" fill="none" stroke="currentColor" strokeWidth="2" />
-                <circle cx="50" cy="50" r="35" fill="none" stroke="currentColor" strokeWidth="3" />
-                <path d="M20 50 L15 50 M80 50 L85 50 M50 20 L50 15 M50 80 L50 85" stroke="currentColor" strokeWidth="2" />
-              </svg>
+              <FormApplicationIcon className="hero-icon-svg hero-icon-svg--form" />
             </div>
           </div>
           <h1 className="hero-title">
@@ -48,7 +40,7 @@ export default function Home() {
             </span>
           </p>
           <div className="hero-actions">
-            <ButtonLink href= "/form" variant="primary" className="btn--hero-primary">
+            <ButtonLink href="/form" variant="primary" className="btn--hero-primary">
               Proceed to Registration
             </ButtonLink>
             <ButtonLink href="#requirements" variant="secondary" className="btn--hero-secondary">
